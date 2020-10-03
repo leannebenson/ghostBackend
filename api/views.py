@@ -23,5 +23,32 @@ class BoastRoastViewset(viewsets.ModelViewSet):
         vote.save()
         return Response(vote.total_votes)
 
+    @action(detail=False)
+    def total(self, request):
+        posts = Boast_Roast.objects.all().order_by('-total_votes')
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
 
+    @action(detail=False)
+    def roasts(self, request):
+        roast_posts = Boast_Roast.objects.filter(post_type=False)
+        serializer = self.get_serializer(roast_posts, many=True)
+        return Response(serializer.data)
 
+    @action(detail=False)
+    def boasts(self, request):
+        boast_posts = Boast_Roast.objects.filter(post_type=True)
+        serializer = self.get_serializer(boast_posts, many=True)
+        return Response(serializer.data)
+
+    # @action(detail=False)
+    # def up_vote(self, request):
+    #     boast_posts = Boast_Roast.objects.filter(post_type=True)
+    #     serializer = self.get_serializer(boast_posts, many=True)
+    #     return Response(serializer.data)
+
+    # @action(detail=False)
+    # def down_vote(self, request):
+    #     boast_posts = Boast_Roast.objects.filter(post_type=True)
+    #     serializer = self.get_serializer(boast_posts, many=True)
+    #     return Response(serializer.data)
